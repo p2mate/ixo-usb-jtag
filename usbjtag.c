@@ -170,7 +170,7 @@ void OutputByte(BYTE d)
 // 
 //   1. Remember bit 6 (0x40) in B as the "Read bit".
 //
-//   2. If bit 7 (0x40) is set, switch to Byte shift mode for the coming
+//   2. If bit 7 (0x80) is set, switch to Byte shift mode for the coming
 //      X bytes ( X := B & 0x3F ), and don't do anything else now.
 //
 //    3. Otherwise, set the JTAG signals as follows:
