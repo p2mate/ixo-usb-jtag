@@ -19,11 +19,11 @@ CC=sdcc
 CFLAGS+=-mmcs51 --no-xinit-opt -I.
 CPPFLAGS+=
 OBJS=delay.rel fx2utils.rel i2c.rel isr.rel timer.rel usb_common.rel
-AR=sdcclib
+AR=sdar
 
 (%.rel) : %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $*.rel
-	$(AR) -a $@ $*.rel
+	$(AR) -rc $@ $*.rel
 	rm $*.rel
 
 libfx2.lib: libfx2.lib($(OBJS))

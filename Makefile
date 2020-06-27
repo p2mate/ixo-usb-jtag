@@ -34,7 +34,7 @@ SDCC_PREFIX ?=
 
 CC = $(SDCC_PREFIX)sdcc
 AS = $(SDCC_PREFIX)sdas8051
-AR = $(SDCC_PREFIX)sdcclib
+AR = $(SDCC_PREFIX)sdar
 PACKIHX=$(SDCC_PREFIX)packihx
 
 CFLAGS+=-mmcs51 --no-xinit-opt -I${LIBDIR}
