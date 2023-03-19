@@ -23,9 +23,9 @@
 //-----------------------------------------------------------------------------
 // comment out (undefine!) if you don't want PS, AS or OE signals
 
-#define HAVE_PS_MODE 1
-#define HAVE_AS_MODE 1
-#define HAVE_OE_LED  1
+//#define HAVE_PS_MODE 1
+//#define HAVE_AS_MODE 1
+//#define HAVE_OE_LED  1
 
 // comment in (define!) if you want outputs disabled when possible
 #define HAVE_OENABLE 1
@@ -34,25 +34,25 @@
 
 /* JTAG TCK, AS/PS DCLK */
 
-sbit at 0xA2          TCK; /* Port C.2 */
+sbit at 0x82          TCK; /* Port A.2 */
 #define bmTCKOE       bmBIT2
 #define SetTCK(x)     do{TCK=(x);}while(0)
 
 /* JTAG TDI, AS ASDI, PS DATA0 */
 
-sbit at 0xA0          TDI; /* Port C.0 */
+sbit at 0x80          TDI; /* Port A.0 */
 #define bmTDIOE       bmBIT0
 #define SetTDI(x)     do{TDI=(x);}while(0)
 
 /* JTAG TMS, AS/PS nCONFIG */
 
-sbit at 0xA3          TMS; /* Port C.3 */
+sbit at 0x83          TMS; /* Port A.3 */
 #define bmTMSOE       bmBIT3
 #define SetTMS(x)     do{TMS=(x);}while(0)
 
 /* JTAG TDO, AS/PS CONF_DONE */
 
-sbit at 0xA1          TDO; /* Port C.1 */
+sbit at 0x81          TDO; /* Port A.1 */
 #define bmTDOOE       bmBIT1
 #define GetTDO(x)     TDO
 
@@ -132,27 +132,27 @@ void ProgIO_Enable(void)  {}
 void ProgIO_Disable(void) {}
 void ProgIO_Deinit(void)  {}
 
-
 void ProgIO_Init(void)
 {
   /* The following code depends on your actual circuit design.
      Make required changes _before_ you try the code! */
 
   // set the CPU clock to 48MHz, enable clock output to FPGA
-  CPUCS = bmCLKOE | bmCLKSPD1;
+//  CPUCS = bmCLKOE | bmCLKSPD1;
+  CPUCS = bmCLKSPD1;
 
   // Use internal 48 MHz, enable output, use "Port" mode for all pins
   IFCONFIG = bmIFCLKSRC | bm3048MHZ | bmIFCLKOE;
 
   // power on the onboard FPGA and all other VCCs, de-assert RESETN
-  IOE = 0x1F;
-  OEE = 0x1F;
-  mdelay(500); // wait for supply to come up
+//  IOE = 0x1F;
+ // OEE = 0x1F;
+  //mdelay(500); // wait for supply to come up
 
 #ifdef HAVE_OENABLE
-  OEC=(OEC&~(bmPROGINOE | bmPROGOUTOE)); // Output disable
+  OEA=(OEA&~(bmPROGINOE | bmPROGOUTOE)); // Output disable
 #else
-  OEC=(OEC&~bmPROGINOE) | bmPROGOUTOE; // Output enable
+  OEA=(OEA&~bmPROGINOE) | bmPROGOUTOE; // Output enable
 #endif
 }
 
@@ -170,7 +170,7 @@ void ProgIO_Set_State(unsigned char d)
 
 #ifdef HAVE_OENABLE
   if((d & bmBIT5) == 0)
-    OEC=(OEC&~(bmPROGINOE | bmPROGOUTOE)); // Output disable
+    OEA=(OEA&~(bmPROGINOE | bmPROGOUTOE)); // Output disable
 #endif
 
   SetTCK((d & bmBIT0) ? 1 : 0);
@@ -186,7 +186,7 @@ void ProgIO_Set_State(unsigned char d)
 
 #ifdef HAVE_OENABLE
   if((d & bmBIT5) != 0)
-    OEC=(OEC&~bmPROGINOE) | bmPROGOUTOE; // Output enable
+    OEA=(OEA&~bmPROGINOE) | bmPROGOUTOE; // Output enable
 #endif
 }
 
